@@ -1,0 +1,40 @@
+Question 1
+https://platform.stratascratch.com/coding/10315-cities-with-the-most-expensive-homes?code_type=1
+
+Descritpion: Write a query that identifies cities with higher than average home prices when compared to the national average. Output the city names.
+DF name - zillow_transactions.
+id: int64
+state: object
+city: object
+street_address: object
+mkt_price: int64
+
+Using SQL:
+
+select 
+    city
+from zillow_transactions
+
+group by 
+	city
+having avg(mkt_price)  > (select 
+														avg(mkt_price) 
+													from 
+														zillow_transactions t )
+
+Using Python:
+
+national_avg_price = zillow_transactions.mkt_price.mean()
+
+zillow_transactions.groupby('city')\
+                .agg({'mkt_price': 'mean'})\
+                .query('mkt_price > @national_avg_price')\
+                .reset_index()['city']
+
+------------------------------------------------------
+
+
+
+
+
+
