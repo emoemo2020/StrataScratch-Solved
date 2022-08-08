@@ -1,4 +1,4 @@
-Question 1
+Question 1: Cities With The Most Expensive Homes
 https://platform.stratascratch.com/coding/10315-cities-with-the-most-expensive-homes?code_type=1
 
 Descritpion: Write a query that identifies cities with higher than average home prices when compared to the national average. Output the city names.
@@ -32,9 +32,76 @@ zillow_transactions.groupby('city')\
                 .reset_index()['city']
 
 ------------------------------------------------------
+Question 2: Highest Energy Consumption
+https://platform.stratascratch.com/coding/10064-highest-energy-consumption?code_type=1
+
+Descritpion: Find the date with the highest total energy consumption from the Meta/Facebook data centers. O
+utput the date along with the total energy consumption across all data centers.
+
+Using SQL:
+
+--РЕШЕНИЕ 1
+
+--with all_data as(select * from fb_eu_energy fbe 
+--#union all
+--select * from fb_asia_energy fba 
+--union all
+--select * from fb_na_energy fbna )
+
+--select t.date, sum(t.consumption) as sum from all_data t
+--group by t.date order by sum desc
+--limit 1
+
+
+--РЕШЕНИЕ 2
+
+--with all_data as (select * from fb_eu_energy fbe 
+--union all
+--select * from fb_asia_energy fba 
+--union all
+--select * from fb_na_energy fbna ),
+
+--agg_sum as(
+--select t.date, sum(t.consumption) as sum from all_data t
+--group by t.date
+--)
+--select * from agg_sum t
+--where t.sum = (select max(t.sum) from agg_sum t)
 
 
 
+--Решение 3 
 
+--with all_data as (select * from fb_eu_energy fbe 
+--union all
+--select * from fb_asia_energy fba 
+--union all
+--select * from fb_na_energy fbna )
 
+--select t.*, rank()  over (sum(consumption)
+
+--from all_data t
+
+--Решение 4 
+
+select date, total_consumption from ( select date, sum(consumption) as total_consumption, rank() over (order by sum(consumption) desc) as r   from 
+(SELECT * FROM fb_eu_energy
+UNION ALL
+SELECT * FROM fb_asia_energy
+UNION ALL
+SELECT * FROM fb_na_energy) all_data
+group by date) t
+where r = 1
+
+USING PYTHON
+
+df = fb_eu_energy
+
+df = pd.concat([fb_eu_energy,fb_asia_energy,fb_na_energy])
+
+t = df.groupby('date').agg({'consumption':'sum'}).reset_index()
+
+t[t['consumption'] == t['consumption'].max()]
+
+------------------------------------------------------
 
