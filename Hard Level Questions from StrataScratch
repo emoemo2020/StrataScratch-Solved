@@ -24,7 +24,29 @@ select
 where rnk <= 0.05
 
 
+----------------------------------------------------
+Question 2: Negative Reviews in New Locations
+https://platform.stratascratch.com/coding/2087-negative-reviews-in-new-locations?code_type=1
 
+Descritpion:Find stores that were opened in the second half of 2021 with more than 20% of their reviews being negative. 
+A review is considered negative when the score given by a customer is below 5. 
+Output the names of the stores together with the ratio of negative reviews to positive ones.
+
+Using SQL:
+
+select 
+    name,
+    sum(case when score < 5 then 1 else 0 end)/sum(case when score >= 5 then 1 else 0 end)
+from 
+    instacart_stores s
+left join 
+    instacart_reviews r on r.store_id = s.id
+where 
+    opening_date >= '2021-07-01'
+group by 
+    name
+having 
+ sum(case when score < 5 then 1 else 0 end)/count(*)::float * 100 > 20
 
 
 
