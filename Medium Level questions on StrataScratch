@@ -345,6 +345,39 @@ group by t.purpose) t
 
 where rank <=3 
 
+------------------------------------------------------
+Question 11: Requests Acceptance Rate
+https://platform.stratascratch.com/coding/10133-requests-acceptance-rate?code_type=1
+
+Descritpion: Find the acceptance rate of requests which is defined as the ratio of accepted contacts vs all contacts.
+Multiply the ratio by 100 to get the rate.
+
+Using SQL:
+
+select
+    sum(case when ts_accepted_at is not null 
+                    then 1 
+                    else 0 end)/count(ts_contact_at)::float * 100 as acceptance_rate
+from 
+    airbnb_contacts;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
