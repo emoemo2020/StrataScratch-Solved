@@ -104,4 +104,76 @@ t = df.groupby('date').agg({'consumption':'sum'}).reset_index()
 t[t['consumption'] == t['consumption'].max()]
 
 ------------------------------------------------------
+Question 3: Finding User Purchases
+https://platform.stratascratch.com/coding/10322-finding-user-purchases?code_type=1
+
+Descritpion: Write a query that'll identify returning active users. A returning active user is a user 
+that has made a second purchase within 7 days of any other of their purchases. 
+Output a list of user_ids of these returning active users.
+
+Using SQL:
+
+Регение 1
+
+SELECT distinct (a1.user_id)
+FROM amazon_transactions a1
+JOIN amazon_transactions a2 ON a1.user_id=a2.user_id
+AND a1.id <> a2.id
+AND a2.created_at::date-a1.created_at::date BETWEEN 0 AND 7
+ORDER BY a1.user_id
+
+Решение 2
+select distinct (a.user_id)
+from
+    amazon_transactions a
+join amazon_transactions b 
+on a.user_id = b.user_id
+where 1=1 and a.id != b.id and
+    b.created_at >= a.created_at
+    and
+    b.created_at <= a.created_at + interval '7 day'
+group by a.user_id
+
+------------------------------------------------------
+Question 4: Customers Without Orders
+https://platform.stratascratch.com/coding/9896-customers-without-orders?code_type=1
+
+Descritpion: Find customers who have never made an order.
+Output the first name of the customer.
+
+Using SQL:
+
+Решение 1
+
+select 
+	first_name 
+from 
+	customers c
+where c.id not in 
+	(select 
+		distinct o.cust_id 
+	from 
+		orders o );
+
+Решение 2
+select 
+    c.first_name 
+from 
+    customers c
+left join 
+    orders o 
+on 
+    c.id = o.cust_id
+where 
+    o.cust_id is null
+
+
+
+
+
+
+
+
+
+
 
