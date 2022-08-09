@@ -308,10 +308,42 @@ from
 where 
     rnk = 1
 
+------------------------------------------------------
+Question 9: Churn Rate Of Lyft Drivers
+https://platform.stratascratch.com/coding/10016-churn-rate-of-lyft-drivers?code_type=1
 
+Descritpion: Find the global churn rate of Lyft drivers across all years.
+Output the rate as a ratio.
 
+Using SQL:
 
+select 
+    count(end_date)/count(*)::float * 100 as churn_rate 
+from 
+    lyft_drivers
 
+------------------------------------------------------
+Question 10: Highest Total Miles (window function)
+https://platform.stratascratch.com/coding/10169-highest-total-miles?code_type=1
+
+Descritpion: You’re given a table of Uber rides that contains the mileage and the purpose for the business expense.  
+You’re asked to find business purposes that generate the most miles driven for passengers that use Uber for their business transportation. 
+Find the top 3 business purpose categories by total mileage.
+
+Using SQL:
+
+select 
+    t.purpose, 
+    all_miles
+from (select 
+            t.purpose,
+            sum(t.miles) as all_miles,    
+            rank() over ( order by sum(t.miles) desc)
+from 
+    my_uber_drives t
+group by t.purpose) t
+
+where rank <=3 
 
 
 
