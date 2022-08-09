@@ -264,8 +264,24 @@ join
 where project_yearly_salary * project_duration>budget
 
 
+------------------------------------------------------
+Question 7: The Best Artist
+https://platform.stratascratch.com/coding/9744-artist-of-the-decade?code_type=1
 
+Descritpion: Find the number of times an artist has been on the billboard top 100 in the past 20 years. 
+Output the result alongside the artist's name and order records based on the founded count in descending order.
 
+Using SQL:
+
+select 
+    artist,
+    count(*) as cnt
+from 
+    billboard_top_100_year_end t
+group by 
+    t.artist
+order by  
+    count(*) desc
 
 
 
