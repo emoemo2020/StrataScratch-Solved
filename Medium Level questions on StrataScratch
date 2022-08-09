@@ -384,9 +384,26 @@ having
 order by nominations desc
 
 
+------------------------------------------------------
+Question 13: Employee and Manager Salaries
 
+https://platform.stratascratch.com/coding/9894-employee-and-manager-salaries?code_type=1
 
+Descritpion: Find employees who are earning more than their managers. 
+Output the employee's first name along with the corresponding salary.
 
+Using SQL:
+
+select 
+    e1.first_name,
+    e1.salary
+from 
+    employee e1
+left join
+    employee e2
+    on e1.manager_id = e2.id
+where 
+    e1.salary > e2.salary
 
 
 
