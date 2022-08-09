@@ -374,7 +374,6 @@ Using SQL:
 
 select 
     nominee,
-    sum(case when winner then 1 else 0 end) as wins,
     count(*) as nominations
 from 
     oscar_nominees
