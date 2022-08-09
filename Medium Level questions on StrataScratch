@@ -168,6 +168,109 @@ where
     o.cust_id is null
 
 
+------------------------------------------------------
+Question 4: CTotal Cost Of Orders
+https://platform.stratascratch.com/coding/10183-total-cost-of-orders?code_type=1
+
+Descritpion: Find the total cost of each customer's orders. 
+Output customer's id, first name, and the total order cost. 
+Order records by customer's first name alphabetically.
+
+Using SQL:
+
+select 
+    o.cust_id,
+    c.first_name,    
+    sum(o.total_order_cost) as total_cost
+from 
+    customers c
+left join 
+    orders o 
+on 
+    c.id = o.cust_id
+group by 
+    o.cust_id,
+    c.first_name
+having 
+    sum(o.total_order_cost) is not null
+order by c.first_name asc
+
+
+------------------------------------------------------
+Question 5: Unique Users Per Client Per Month
+https://platform.stratascratch.com/coding/2024-unique-users-per-client-per-month?code_type=1
+
+Descritpion: Write a query that returns the number of unique users per client per month
+
+Using SQL:
+
+select  
+    extract(month from time_id) as month,
+    t.client_id,
+    count(distinct t.user_id)
+from 
+    fact_events t
+group by
+    t.client_id,
+    extract(month from time_id)
+order by t.client_id
+
+
+------------------------------------------------------
+Question 6: Risky Projects
+https://platform.stratascratch.com/coding/10304-risky-projects?code_type=1
+
+Descritpion: Identify projects that are at risk for going overbudget. 
+A project is considered to be overbudget if the cost of all employees assigned to the project is greater than the budget of the project.
+You'll need to prorate the cost of the employees to the duration of the project. For example, if the budget 
+for a project that takes half a year to complete is $10K, then the total half-year salary of all employees assigned 
+to the project should not exceed $10K. Salary is defined on a yearly basis, so be careful how to calculate salaries 
+or the projects that last less or more than one year.
+Output a list of projects that are overbudget with their project name, project budget, and prorated total employee expense 
+(rounded to the next dollar amount).
+
+Using SQL:
+
+with all_data as (select 
+    p.title,
+    p.budget,
+    p.id,
+    p.start_date,
+    p.end_date,
+    (p.end_date-p.start_date)/365::float as project_duration
+    
+from linkedin_projects p),
+
+project_yearly_salary as (
+select 
+    ep.project_id,
+    sum(salary) as project_yearly_salary
+from  
+    linkedin_emp_projects ep
+join
+    linkedin_employees emp on ep.emp_id = emp.id
+group by
+    ep.project_id)
+
+select 
+    title,
+    budget,
+    ceiling(project_yearly_salary * project_duration) as project_expences
+
+from 
+    all_data a
+join 
+    project_yearly_salary p on a.id = p.project_id
+where project_yearly_salary * project_duration>budget
+
+
+
+
+
+
+
+
+
 
 
 
