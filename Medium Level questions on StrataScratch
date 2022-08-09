@@ -278,10 +278,12 @@ select
     count(*) as cnt
 from 
     billboard_top_100_year_end t
+where 
+    date_part('year', CURRENT_DATE) - year <= 20
 group by 
     t.artist
 order by  
-    count(*) desc
+    count(*) desc 
 
 
 
