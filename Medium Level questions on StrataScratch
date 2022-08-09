@@ -285,9 +285,28 @@ group by
 order by  
     count(*) desc 
 
+------------------------------------------------------
+Question 8: Highest Salary In Department (window function)
+https://platform.stratascratch.com/coding/9897-highest-salary-in-department?code_type=1
 
+Descritpion: Find the employee with the highest salary per department.
+Output the department name, employee's first name along with the corresponding salary.
 
+Using SQL:
 
+with ranked_salaries as (select 
+    department,
+    first_name,
+    salary,
+    rank() over (partition by department order by salary desc) as rnk
+from employee)
+
+select 
+    * 
+from 
+    ranked_salaries
+where 
+    rnk = 1
 
 
 
