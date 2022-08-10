@@ -11,16 +11,16 @@ mkt_price: int64
 
 Using SQL:
 
-select 
+SELECT 
     city
-from zillow_transactions
+FROM 
+    zillow_transactions
 
-group by 
-	city
-having avg(mkt_price)  > (select 
-														avg(mkt_price) 
-													from 
-														zillow_transactions t )
+GROUP BY 
+    city
+HAVING 
+    avg(mkt_price)  > (select avg(mkt_price) from zillow_transactions t )
+
 
 Using Python:
 
@@ -84,14 +84,20 @@ Using SQL:
 
 --Решение 4 
 
-select date, total_consumption from ( select date, sum(consumption) as total_consumption, rank() over (order by sum(consumption) desc) as r   from 
-(SELECT * FROM fb_eu_energy
-UNION ALL
-SELECT * FROM fb_asia_energy
-UNION ALL
-SELECT * FROM fb_na_energy) all_data
-group by date) t
-where r = 1
+SELECT 
+    date, 
+    total_consumption from ( select date, sum(consumption) as total_consumption, 
+    rank() over (order by sum(consumption) desc) as r   
+
+FROM 
+    (SELECT * FROM fb_eu_energy
+    UNION ALL
+    SELECT * FROM fb_asia_energy
+    UNION ALL
+    SELECT * FROM fb_na_energy) all_data
+    GROUP BY date) t
+    WHERE r = 1
+
 
 USING PYTHON
 
@@ -123,16 +129,18 @@ AND a2.created_at::date-a1.created_at::date BETWEEN 0 AND 7
 ORDER BY a1.user_id
 
 Решение 2
-select distinct (a.user_id)
-from
+SELECT 
+    a.user_id
+FROM
     amazon_transactions a
-join amazon_transactions b 
-on a.user_id = b.user_id
-where 1=1 and a.id != b.id and
-    b.created_at >= a.created_at
-    and
-    b.created_at <= a.created_at + interval '7 day'
-group by a.user_id
+JOIN amazon_transactions b 
+ON a.user_id = b.user_id
+WHERE 1=1 
+    AND a.id != b.id 
+    AND b.created_at >= a.created_at
+    AND b.created_at <= a.created_at + interval '7 day'
+GROUP BY 
+    a.user_id
 
 ------------------------------------------------------
 Question 4: Customers Without Orders
@@ -156,17 +164,16 @@ where c.id not in
 		orders o );
 
 Решение 2
-select 
+SELECT 
     c.first_name 
-from 
+FROM 
     customers c
-left join 
+LEFT JOIN 
     orders o 
-on 
+ON 
     c.id = o.cust_id
-where 
+WHERE 
     o.cust_id is null
-
 
 ------------------------------------------------------
 Question 4: CTotal Cost Of Orders
