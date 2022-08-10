@@ -431,7 +431,7 @@ order by
     streams
 limit 10
 
-
+------------------------------------------------------
 Question 15: Avg Order Cost During Rush Hours
 
 https://platform.stratascratch.com/coding/2035-avg-order-cost-during-rush-hours?code_type=1
@@ -456,9 +456,32 @@ group by
 
 
 
+------------------------------------------------------
+Question 16: Avg Order Cost During Rush Hours
 
+https://platform.stratascratch.com/coding/9636-cheapest-neighborhoods-with-real-beds-and-internet?code_type=1
 
+Descritpion: Find neighborhoods where you can sleep on a real bed in a villa with internet while paying the lowest price possible.
 
+Using SQL:
+
+select 
+    neighbourhood,
+    min(price) min_ptice
+from 
+    airbnb_search_details
+where 
+    property_type = 'Villa'
+    AND
+    bed_type = 'Real Bed'
+    AND
+    LOWER(amenities) LIKE '%internet%'
+
+group by 
+    neighbourhood
+order by 
+    min_ptice asc
+    
 
 
 
