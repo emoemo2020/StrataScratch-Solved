@@ -83,9 +83,41 @@ order by
     number_of_businesses desc
 
 
+----------------------------------------------------
+Question 4: Distinct Salaries
+https://platform.stratascratch.com/coding/9898-unique-salaries?code_type=1
+
+Descritpion:Find the top three distinct salaries for each department. 
+Output the department name and the top 3 distinct salaries by each department. 
+Order your results alphabetically by department and then by highest salary to lowest.
 
 
 
+Using SQL:
+
+with ranked_salaries as 
+    (select 
+    department,
+    salary,
+    rank() over (partition by department order by salary DESC) as rnk
+from 
+        (select 
+            department, 
+            salary
+        from
+            twitter_employee
+        group by 
+            department, 
+            salary 
+        order by
+            department, 
+            salary ) t)
+            
+select 
+    *
+from 
+    ranked_salaries
+where rnk <=3
 
 
 
