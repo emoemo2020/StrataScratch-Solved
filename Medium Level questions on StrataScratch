@@ -176,7 +176,7 @@ WHERE
     o.cust_id is null
 
 ------------------------------------------------------
-Question 4: CTotal Cost Of Orders
+Question 4: Total Cost Of Orders
 https://platform.stratascratch.com/coding/10183-total-cost-of-orders?code_type=1
 
 Descritpion: Find the total cost of each customer's orders. 
