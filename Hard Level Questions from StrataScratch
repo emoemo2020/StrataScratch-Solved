@@ -119,6 +119,7 @@ from
     ranked_salaries
 where rnk <=3
 
+---------------------------------------------------------------------
 
 Question 5: Monthly Percentage Difference
 https://platform.stratascratch.com/coding/10319-monthly-percentage-difference?code_type=2
@@ -169,5 +170,17 @@ df['change_percentage'] = round(((df['value'] - df['Prev_month']) / df['Prev_mon
 df_final = df[['Month', 'change_percentage']]
 df_final
 
+Решение 2:
+df['Month'] = df.created_at.dt.to_period('M')
 
+monthly_revenue = df.groupby('Month').agg({'value':'sum'}).sort_values('Month').reset_index()
+
+monthly_revenue['prev_month'] = monthly_revenue.value.shift()
+monthly_revenue['monthly_difference'] = monthly_revenue.value.diff()
+
+monthly_revenue
+
+monthly_revenue['change_percentage'] = round(monthly_revenue['monthly_difference']/monthly_revenue['prev_month']*100,2)
+
+monthly_revenue[['Month','change_percentage']]
 
