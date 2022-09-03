@@ -120,15 +120,54 @@ from
 where rnk <=3
 
 
+Question 5: Monthly Percentage Difference
+https://platform.stratascratch.com/coding/10319-monthly-percentage-difference?code_type=2
 
+Descritpion:Given a table of purchases by date, calculate the month-over-month percentage change in revenue. 
+The output should include the year-month date (YYYY-MM) and percentage change, rounded to the 2nd decimal point, 
+and sorted from the beginning of the year to the end of the year.
+The percentage change column will be populated from the 2nd month forward and can be calculated as 
+((this month's revenue - last month's revenue) / last month's revenue)*100.
 
+Using SQL:
 
+with revenue as (select 
+    date_trunc('month',created_at) as date_month  ,
+    sum(t.value) as revenue
+from sf_transactions t
+group by date_month
+order by date_month),
 
+final_revenue as (
+            select t.*,
+                    lag(t.revenue) over (order by t.date_month) as prev_month_revenue
+    
+            from revenue t),
+final_final as (
 
+select to_char(t.date_month, 'YYYY-MM') as month,
+      round((( t.revenue - t.prev_month_revenue) / prev_month_revenue)*100, 2) as difference 
+from final_revenue t)
 
+select * from revenue
 
+;
 
+Using Python Pandas:
 
+import numpy
+import pandas
+df = sf_transactions
+
+df['Month'] = df.created_at.dt.to_period('M')
+df = df.groupby('Month').agg({'value':'sum'}).sort_values('Month').reset_index()
+
+df['Prev_month'] = df['value'].shift()
+
+df['change_percentage'] = round(((df['value'] - df['Prev_month']) / df['Prev_month'])*100,2)
+
+df_final = df[['Month', 'change_percentage']]
+df_final
 
 
 
